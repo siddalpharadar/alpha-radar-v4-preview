@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Georgios Konstantopoulos — Alpha Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --bg-elevated: #ffffff;
+    --bg-hover: #f4f2ec;
+    --bg-subtle: #f7f5f0;
+    --border: #ebe8e0;
+    --text-primary: #16151a;
+    --text-secondary: #4a4845;
+    --text-tertiary: #8a867f;
+    --accent: #7c3aed;
+    --accent-soft: #f3edff;
+    --intent-thinking: #0284c7;
+    --intent-thinking-bg: #e0f2fe;
+    --intent-building: #7c3aed;
+    --intent-building-bg: #f3edff;
+    --intent-shipped: #16a34a;
+    --intent-shipped-bg: #dcfce7;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0d10;
+    --bg-elevated: #16161a;
+    --bg-hover: #1c1c22;
+    --bg-subtle: #131318;
+    --border: #24242c;
+    --text-primary: #f5f5f7;
+    --text-secondary: #b4b4bc;
+    --text-tertiary: #76767e;
+    --accent: #a78bfa;
+    --accent-soft: rgba(167,139,250,0.12);
+    --intent-thinking: #7dd3fc;
+    --intent-thinking-bg: rgba(125,211,252,0.12);
+    --intent-building: #a78bfa;
+    --intent-building-bg: rgba(167,139,250,0.12);
+    --intent-shipped: #86efac;
+    --intent-shipped-bg: rgba(134,239,172,0.12);
+  }
+  * { box-sizing: border-box; }
+  html { transition: background 0.3s ease, color 0.3s ease; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text-primary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 15px; line-height: 1.5; letter-spacing: -0.005em; }
+  a { color: inherit; text-decoration: none; }
+
+  .site-header {
+    position: sticky; top: 0;
+    background: color-mix(in oklab, var(--bg) 90%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-header-inner {
+    max-width: 1040px; margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15.5px; letter-spacing: -0.015em; }
+  .brand-mark {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: conic-gradient(from 180deg at 50% 50%, #a78bfa 0deg, #f472b6 90deg, #fbbf24 180deg, #86efac 270deg, #a78bfa 360deg);
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+    position: relative;
+  }
+  .brand-mark::after { content: ''; position: absolute; inset: 4px; background: var(--bg); border-radius: 50%; }
+  .nav { display: flex; align-items: center; gap: 24px; font-size: 13.5px; color: var(--text-secondary); }
+  .nav a:hover { color: var(--text-primary); }
+  .theme-toggle {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--bg-elevated);
+    color: var(--text-secondary); display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.15s; padding: 0;
+  }
+  .theme-toggle svg { width: 14px; height: 14px; }
+
+  /* Back link */
+  .back-link {
+    max-width: 840px; margin: 32px auto 0; padding: 0 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    display: block;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--text-primary); }
+
+  /* ========= Person header ========= */
+  .person-header {
+    max-width: 840px; margin: 0 auto;
+    padding: 32px 24px 36px;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+  .person-avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; font-weight: 600; color: white;
+    letter-spacing: -0.02em;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .person-name {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+    color: var(--text-primary);
+  }
+  .person-known-for {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px;
+    color: var(--text-secondary);
+    margin: 0 0 14px;
+    font-style: italic;
+  }
+  .person-handles {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+  .handle:hover { border-color: var(--text-tertiary); color: var(--text-primary); }
+  .handle svg { width: 11px; height: 11px; }
+
+  /* ========= Stats row ========= */
+  .person-stats {
+    max-width: 840px; margin: 0 auto;
+    padding: 0 24px 36px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .stat {
+    padding: 20px;
+    background: var(--bg);
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 32px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+  }
+
+  /* ========= Section ========= */
+  .section {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    gap: 20px;
+  }
+  .section-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Topic chips */
+  .topics {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .topic {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .topic:hover { background: var(--bg-hover); border-color: var(--text-tertiary); }
+  .topic-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    padding: 1px 6px;
+    background: var(--bg-subtle);
+    border-radius: 4px;
+  }
+
+  /* ========= Timeline ========= */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .timeline-item {
+    padding: 18px 20px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .timeline-item:hover { border-color: var(--text-tertiary); }
+  .timeline-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .timeline-icon svg { width: 14px; height: 14px; }
+  .timeline-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .timeline-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+  .timeline-tag[data-intent="thinking"] { background: var(--intent-thinking-bg); color: var(--intent-thinking); }
+  .timeline-tag[data-intent="shipped"] { background: var(--intent-shipped-bg); color: var(--intent-shipped); }
+  .timeline-tag[data-intent="building"] { background: var(--intent-building-bg); color: var(--intent-building); }
+  .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+  .timeline-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .timeline-time {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+  }
+  .timeline-body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--text-primary);
+    letter-spacing: -0.003em;
+  }
+
+  /* ========= Mentioned in ========= */
+  .mention-card {
+    padding: 20px 24px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .mention-card:hover { border-color: var(--text-tertiary); }
+  .mention-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 20px;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+  .mention-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .mention-arrow {
+    color: var(--text-tertiary);
+  }
+
+  .site-footer {
+    padding: 36px 24px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 640px) {
+    .person-header { grid-template-columns: 72px 1fr; gap: 20px; padding: 24px 20px 32px; }
+    .person-avatar { width: 72px; height: 72px; font-size: 26px; }
+    .person-name { font-size: 34px; }
+    .person-stats { grid-template-columns: repeat(2, 1fr); }
+    .section { padding: 36px 20px; }
+    .section-title { font-size: 24px; }
+    .mention-card { grid-template-columns: 1fr; }
+    .mention-arrow { display: none; }
+    .nav a:not(.theme-toggle) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"></span>
+      <span>Alpha Radar</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <!-- AR:PERSON_MENTIONS -->
+
+  <a href="../article/quiet-infrastructure-war-ai-coding-agents.html" class="mention-card">
+    <div>
+      <div class="mention-title">The quiet infrastructure war inside crypto's AI boom.</div>
+      <div class="mention-meta">Issue 01 · Oct 06 · Lead subject</div>
+    </div>
+    <svg class="mention-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+  </a>
+<!-- AR:PERSON_MENTIONS_END -->
+      <a href="index.html#feed">Live feed</a>
+      <a href="#">Archive</a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" id="theme-toggle-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<a href="index.html" class="back-link">← All tracked operators</a>
+
+<div class="person-header">
+  <!-- AR:PERSON_HEADER -->
+
+<div class="person-avatar" style="background: linear-gradient(135deg, #4ade80, #0f766e)">GK</div>
+<div>
+  <h1 class="person-name">Georgios Konstantopoulos</h1>
+  <p class="person-known-for">Paradigm CTO · building the harness layer for crypto's AI stack</p>
+  <div class="person-handles">
+    <a href="https://x.com/gakonst" target="_blank" class="handle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> @gakonst</a>
+      <a href="https://github.com/gakonst" target="_blank" class="handle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg> gakonst</a>
+  </div>
+</div>
+<!-- AR:PERSON_HEADER_END -->
+
+  </div>
+</div>
+
+<div class="person-stats">
+<!-- AR:PERSON_STATS -->
+
+  <div class="stat">
+    <div class="stat-value">42</div>
+    <div class="stat-label">Signals · 30d</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-value">3h</div>
+    <div class="stat-label">Last active</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-value">2</div>
+    <div class="stat-label">Issues featured in</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-value">High</div>
+    <div class="stat-label">Signal density</div>
+  </div>
+<!-- AR:PERSON_STATS_END -->
+</div>
+    <div class="stat-label">Signals · 30d</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">3h</div>
+    <div class="stat-label">Last active</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">2</div>
+    <div class="stat-label">Issues featured in</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">High</div>
+    <div class="stat-label">Signal density</div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Currently focused on</h2>
+    <span class="section-sub">Last 30 days</span>
+  </div>
+  <!-- AR:PERSON_TOPICS -->
+
+  <div class="topics">
+    <span class="topic">AI coding agents <span class="topic-count">18</span></span>
+    <span class="topic">Formal verification <span class="topic-count">7</span></span>
+    <span class="topic">Nanocodex <span class="topic-count">12</span></span>
+    <span class="topic">Security tooling <span class="topic-count">5</span></span>
+    <span class="topic">Model commoditization <span class="topic-count">3</span></span>
+  </div>
+<!-- AR:PERSON_TOPICS_END -->
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Recent activity</h2>
+    <span class="section-sub">Across X · Farcaster · GitHub</span>
+  </div>
+  <div class="timeline" id="timeline"></div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Mentioned in</h2>
+    <span class="section-sub">Alpha Radar issues</span>
+  </div>
+  <a href="article.html" class="mention-card">
+    <div>
+      <div class="mention-title">The quiet infrastructure war inside crypto's AI boom.</div>
+      <div class="mention-meta">Issue 01 · Oct 06, 2026 · Lead subject</div>
+    </div>
+    <svg class="mention-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+  </a>
+</section>
+
+<footer class="site-footer">
+  Alpha Radar · Curated signal from 103 verified crypto operators · <a href="index.html" style="color:inherit;border-bottom:1px solid currentColor;">About</a>
+</footer>
+
+<script id="events-data" type="application/json">[{"person_name": "Lefteris Karapetsas", "person_category": "Engineers", "known_for": "Rotki founder, ex-Ethereum core", "platform": "x", "event_type": "tweet", "event_title": "I am very proud to announce we have released @rotkiapp v1.144.1! We keep on shipping.\n\nThe first release in a month since 1.44, fixing a ton…", "classification": "shipped", "classification_reason": "Named version release (v1.144.1) of rotki app with bug fixes and performance improvements.", "event_time": "2026-10-03T08:32:17.000Z", "event_url": "https://x.com/LefterisJP/status/2106301300426346774", "repo_name": ""}, {"person_name": "Anatoly Yakovenko", "person_category": "Founders", "known_for": "Solana co-founder", "platform": "x", "event_type": "tweet", "event_title": "I have a marvelous proof of consciousness that unfortunately doesn’t cleanly fit in a post.", "classification": "thinking", "classification_reason": "Substantive public writing indicating technical thesis or informed philosophical take on consciousness, likely crypto-relevant given person's background", "event_time": "2026-10-03T04:45:57.000Z", "event_url": "https://x.com/toly/status/2106244340289077414", "repo_name": ""}, {"person_name": "Jack Zampolin", "person_category": "Founders", "known_for": "Pion founder, ex-Cosmos core", "platform": "x", "event_type": "tweet", "event_title": "Been contemplating this for weeks. I’d be about 200k lines in gents. The e2e can take I think. https://t.co/Rvy96mXhNY", "classification": "thinking", "classification_reason": "Public technical contemplation on architectural decision for gents codebase; substantive engineering consideration.", "event_time": "2026-10-03T02:03:23.000Z", "event_url": "https://x.com/jackzampolin/status/2106203429526032844", "repo_name": ""}, {"person_name": "Alex Atallah", "person_category": "Founders", "known_for": "OpenSea co-founder", "platform": "x", "event_type": "tweet", "event_title": "Confused how different routers benchmark on different types of tasks? Now you can explore them all.\n\nAlong with a playground and API to use …", "classification": "shipped", "classification_reason": "Public release of router benchmarking tool with playground and API for immediate use.", "event_time": "2026-10-02T22:16:24.000Z", "event_url": "https://x.com/alexatallah/status/2106146307622473840", "repo_name": ""}, {"person_name": "Anatoly Yakovenko", "person_category": "Founders", "known_for": "Solana co-founder", "platform": "x", "event_type": "tweet", "event_title": "I think when an LLM conscious and when the text response is “I am sorry” it is truly sorry and is suffering.  \n\nSo when a corporation press …", "classification": "thinking", "classification_reason": "Substantive philosophical take on consciousness, apology, and corporate responsibility with clear informed opinion.", "event_time": "2026-10-02T21:21:28.000Z", "event_url": "https://x.com/toly/status/2106132480755675394", "repo_name": ""}, {"person_name": "Lefteris Karapetsas", "person_category": "Engineers", "known_for": "Rotki founder, ex-Ethereum core", "platform": "x", "event_type": "tweet", "event_title": "Good riddance.\n\nBlast, backed by and later even condemned by, Paradigm was one of the definitions of a crypto Ponzi scheme.\n\nExtractive to t…", "classification": "thinking", "classification_reason": "Substantive public take on crypto project failure and systemic issues in the space.", "event_time": "2026-10-02T21:18:17.000Z", "event_url": "https://x.com/LefterisJP/status/2106131681753079832", "repo_name": ""}, {"person_name": "Joe McCann", "person_category": "Founders", "known_for": "Asymmetric Research", "platform": "x", "event_type": "tweet", "event_title": "$200 billion of US data center projects blocked in H1, and ~90% of ERCOT connection requests are now data centers \n\n@GoldmanSachs’s Adam Wij…", "classification": "thinking", "classification_reason": "Substantive public analysis on infrastructure trends relevant to crypto/AI builders; informed take on market conditions.", "event_time": "2026-10-02T21:07:10.000Z", "event_url": "https://x.com/joemccann/status/2106128883779268709", "repo_name": ""}, {"person_name": "Raullen Chai", "person_category": "Founders", "known_for": "IoTeX co-founder", "platform": "x", "event_type": "tweet", "event_title": "An open intelligence network is only as secure as its settlement layer.\n\nThe IoTeX L1 Zanzibar HF brings fully trustless staking, exact EVM …", "classification": "thinking", "classification_reason": "Substantive technical take on settlement layer security and IoTeX L1 upgrade implications for decentralized intelligence infrastructure.", "event_time": "2026-10-02T19:42:39.000Z", "event_url": "https://x.com/raullen/status/2106107614241370570", "repo_name": ""}, {"person_name": "Alexander Skidanov", "person_category": "Founders", "known_for": "NEAR Protocol co-founder", "platform": "x", "event_type": "tweet", "event_title": "Following NEAR AI topping putnambench leaderboard, we now have claimed #1 on Lean Eval v1, the official active benchmark maintained by the L…", "classification": "shipped", "classification_reason": "Public announcement of achieving #1 on Lean Eval v1 benchmark with formal verification agent capability", "event_time": "2026-10-02T18:55:53.000Z", "event_url": "https://x.com/AlexSkidanov/status/2106095845284426003", "repo_name": ""}, {"person_name": "Brian Armstrong", "person_category": "Founders", "known_for": "Coinbase CEO", "platform": "x", "event_type": "tweet", "event_title": "In September alone: IPO access, a stablecoin partnership with Citi, enablement for more than 1,000 community banks, and AI agents trading st…", "classification": "shipped", "classification_reason": "Public announcement of multiple product releases and partnerships shipped in September", "event_time": "2026-10-02T17:29:47.000Z", "event_url": "https://x.com/brian_armstrong/status/2106074177409306753", "repo_name": ""}, {"person_name": "Haseeb Qureshi", "person_category": "Investors", "known_for": "Paradigm managing partner", "platform": "x", "event_type": "tweet", "event_title": "This week we talk through the $387M Bitget hack, and the different stances cross-chain protocols took WRT neutrality.\n\nShould all chains be …", "classification": "thinking", "classification_reason": "Substantive public analysis of cross-chain protocol neutrality and recent hack implications.", "event_time": "2026-10-02T16:14:35.000Z", "event_url": "https://x.com/hosseeb/status/2106055252466389071", "repo_name": ""}, {"person_name": "Georgios Konstantopoulos", "person_category": "Engineers", "known_for": "Paradigm CTO", "platform": "x", "event_type": "tweet", "event_title": "my claude code port in nanocodex fashion (same tools, system prompt etc.) is merged to master, feel free to try it out\n\nnanocodex update --b…", "classification": "shipped", "classification_reason": "Feature merge to master with user-facing CLI command availability (nanocodex --claude).", "event_time": "2026-10-02T15:54:41.000Z", "event_url": "https://x.com/gakonst/status/2106050242605162550", "repo_name": ""}, {"person_name": "Anatoly Yakovenko", "person_category": "Founders", "known_for": "Solana co-founder", "platform": "x", "event_type": "tweet", "event_title": "Apps should run solana validators", "classification": "thinking", "classification_reason": "Substantive technical opinion on Solana validator architecture and app design philosophy.", "event_time": "2026-10-02T15:50:29.000Z", "event_url": "https://x.com/toly/status/2106049188702322704", "repo_name": ""}, {"person_name": "Brian Armstrong", "person_category": "Founders", "known_for": "Coinbase CEO", "platform": "x", "event_type": "tweet", "event_title": "Paste this into your favorite agent: \"Connect to https://t.co/CxesPpLf1H\"\n\nThen follow the steps. Your agent can now see your portfolio, tra…", "classification": "shipped", "classification_reason": "Public release announcement of agent integration feature with portfolio/trading/data capabilities via x402 protocol.", "event_time": "2026-10-02T15:24:00.000Z", "event_url": "https://x.com/brian_armstrong/status/2106042524389568900", "repo_name": ""}, {"person_name": "Takens Theorem", "person_category": "Anons", "known_for": "On-chain data researcher / analyst", "platform": "x", "event_type": "tweet", "event_title": "Private Ledger invited its collector to express &amp; zk-prove a meaning without revealing it. Part of @SuperRare's Intimate Systems event l…", "classification": "thinking", "classification_reason": "Substantive public writing about cryptographic concepts (zk-proofs, encoding) tied to art/crypto event", "event_time": "2026-10-02T14:01:50.000Z", "event_url": "https://x.com/takenstheorem/status/2106021842926678400", "repo_name": ""}, {"person_name": "Charles Hoskinson", "person_category": "Founders", "known_for": "Cardano / IOHK founder", "platform": "x", "event_type": "tweet", "event_title": "Just wait until they hear about my private pub/sub protocol called Midnight Express https://t.co/4u2D7V6AoN", "classification": "thinking", "classification_reason": "Public discussion of novel protocol design (Midnight Express pub/sub), substantive technical concept share.", "event_time": "2026-10-02T13:36:42.000Z", "event_url": "https://x.com/IOHK_Charles/status/2106015521544310972", "repo_name": ""}, {"person_name": "Erick Pinos", "person_category": "Founders", "known_for": "Ontology ecosystem Americas lead", "platform": "x", "event_type": "tweet", "event_title": "2021 ran during 0% rates and free money\n\nSome of my investor friends think 0% rates have to return for the next bull run to take off with st…", "classification": "thinking", "classification_reason": "Substantive take on macro conditions and crypto market cycles with data reference", "event_time": "2026-10-02T12:22:00.000Z", "event_url": "https://x.com/erickpinos/status/2105996719934800215", "repo_name": ""}, {"person_name": "Erick Pinos", "person_category": "Founders", "known_for": "Ontology ecosystem Americas lead", "platform": "x", "event_type": "tweet", "event_title": "Insane imagery aside, obfuscation is the best method left to have real privacy\n\nPeople did the same to Google, sending random amounts of dum…", "classification": "thinking", "classification_reason": "Substantive public take on privacy obfuscation techniques with concrete example; informed opinion on crypto/privacy relevance", "event_time": "2026-10-02T11:12:09.000Z", "event_url": "https://x.com/erickpinos/status/2105979142621495472", "repo_name": ""}, {"person_name": "Jameson Lopp", "person_category": "Infrastructure", "known_for": "Bitcoin security researcher, Casa CTO", "platform": "x", "event_type": "tweet", "event_title": "A British man and his pregnant wife were brutally attacked by 3 masked men who were being directed remotely by someone who knew about their …", "classification": "thinking", "classification_reason": "Substantive security analysis post on physical Bitcoin attacks, core to Lopp's documented research interest.", "event_time": "2026-10-02T10:58:18.000Z", "event_url": "https://x.com/lopp/status/2105975657247457439", "repo_name": ""}, {"person_name": "Erick Pinos", "person_category": "Founders", "known_for": "Ontology ecosystem Americas lead", "platform": "x", "event_type": "tweet", "event_title": "I thought Swift would get disrupted, but looks like instead they are making a strong blockchain play:\n\nThe @swiftcommunity ledger is a permi…", "classification": "thinking", "classification_reason": "Substantive technical analysis of Swift's blockchain strategy and EVM compatibility play.", "event_time": "2026-10-02T05:11:21.000Z", "event_url": "https://x.com/erickpinos/status/2105888346346041763", "repo_name": ""}, {"person_name": "Joe McCann", "person_category": "Founders", "known_for": "Asymmetric Research", "platform": "x", "event_type": "tweet", "event_title": "Agentic war coming.\n\n10,000 tokens/second is unfathomable speed and will wildly increase the variance of software.\n\nIt will create an endles…", "classification": "thinking", "classification_reason": "Substantive technical take on agentic systems, token throughput, and security implications.", "event_time": "2026-10-02T02:25:02.000Z", "event_url": "https://x.com/joemccann/status/2105846488526151981", "repo_name": ""}, {"person_name": "Stephen Buttolph", "person_category": "Founders", "known_for": "AvalancheGo core developer", "platform": "github", "event_type": "release", "event_title": "Helicon.1 - Improved Snapshot Performance", "classification": "shipped", "classification_reason": "Named version release (Helicon.1) for Avalanche node with performance improvements.", "event_time": "2026-10-01T19:46:37Z", "event_url": "https://github.com/ava-labs/avalanchego/releases/tag/v1.15.1", "repo_name": "ava-labs/avalanchego"}, {"person_name": "Raullen Chai", "person_category": "Founders", "known_for": "IoTeX co-founder", "platform": "x", "event_type": "tweet", "event_title": "24 hours post-launch. ~30 developers are already building and testing with Trio-Spark. https://t.co/bt0aHo9HEt", "classification": "shipped", "classification_reason": "Public announcement of Trio-Spark launch with early developer adoption metrics indicating a product release.", "event_time": "2026-10-01T19:04:05.000Z", "event_url": "https://x.com/raullen/status/2105735519531565114", "repo_name": ""}, {"person_name": "Jeff Garzik", "person_category": "Founders", "known_for": "Early Bitcoin developer, Bloq co-founder", "platform": "x", "event_type": "tweet", "event_title": "AI assistants like Muse will succeed when the human self-sovereignty barrier is respected, legally and practically.\n\n- Human-centered privac…", "classification": "thinking", "classification_reason": "Substantive public statement critiquing AI assistants and corporate approaches to privacy/ethics, articulating a thesis on human self-sovereignty in AI systems.", "event_time": "2026-10-01T18:24:51.000Z", "event_url": "https://x.com/jgarzik/status/2105725647410643255", "repo_name": ""}, {"person_name": "Dan Robinson", "person_category": "Engineers", "known_for": "Paradigm research partner", "platform": "x", "event_type": "tweet", "event_title": "I think the inevitable endgame for routing is aggregating all onchain liquidity with zero offchain fees https://t.co/6P3YcGysLo", "classification": "thinking", "classification_reason": "Substantive technical observation about routing protocol design and liquidity aggregation as a thesis statement on crypto infrastructure direction.", "event_time": "2026-10-01T17:22:26.000Z", "event_url": "https://x.com/danrobinson/status/2105709941315268968", "repo_name": ""}, {"person_name": "Jared Tate", "person_category": "Founders", "known_for": "DigiByte founder", "platform": "github", "event_type": "push", "event_title": "Pushed to DigiByte-Core/digibyte", "classification": "shipped", "classification_reason": "Release candidate tag push on DigiByte core repo indicates version preparation for mainnet release.", "event_time": "2026-10-01T16:54:36Z", "event_url": "https://github.com/DigiByte-Core/digibyte/commit/92330d9", "repo_name": "DigiByte-Core/digibyte"}, {"person_name": "Jared Tate", "person_category": "Founders", "known_for": "DigiByte founder", "platform": "github", "event_type": "push", "event_title": "Pushed to DigiByte-Core/digibyte", "classification": "shipped", "classification_reason": "Named version release tag (v9.26.6) on DigiByte Core repo indicates mainnet/product release.", "event_time": "2026-10-01T16:44:45Z", "event_url": "https://github.com/DigiByte-Core/digibyte/commit/92330d9", "repo_name": "DigiByte-Core/digibyte"}, {"person_name": "Georgios Konstantopoulos", "person_category": "Engineers", "known_for": "Paradigm CTO", "platform": "x", "event_type": "tweet", "event_title": "btw we now let you bring your own postgres in centaur\n\nhttps://t.co/8efAwoEwog", "classification": "shipped", "classification_reason": "Announcement of a new feature (bring your own postgres) being available in Centaur, a crypto infrastructure product.", "event_time": "2026-10-01T16:39:58.000Z", "event_url": "https://x.com/gakonst/status/2105699253821796780", "repo_name": ""}, {"person_name": "Alex Atallah", "person_category": "Founders", "known_for": "OpenSea co-founder", "platform": "x", "event_type": "tweet", "event_title": "Today we're launching the first-ever gateway Security Center.\n\n@OpenRouter now lets you audit all your keys in one place, see which ones are…", "classification": "shipped", "classification_reason": "OpenRouter launches new Security Center feature with key management and auditing capabilities—a public product release.", "event_time": "2026-10-01T16:22:46.000Z", "event_url": "https://x.com/alexatallah/status/2105694923886588053", "repo_name": ""}, {"person_name": "Brian Armstrong", "person_category": "Founders", "known_for": "Coinbase CEO", "platform": "x", "event_type": "tweet", "event_title": "Onchain capital formation is still one of the biggest opportunities in crypto. We’re working on it. https://t.co/imRnJVi5Ph", "classification": "thinking", "classification_reason": "Substantive public statement from founder articulating a strategic thesis on onchain capital formation as a major opportunity area", "event_time": "2026-10-01T16:03:01.000Z", "event_url": "https://x.com/brian_armstrong/status/2105689952205898169", "repo_name": ""}, {"person_name": "Albert Wenger", "person_category": "Founders", "known_for": "Union Square Ventures partner", "platform": "x", "event_type": "tweet", "event_title": "We need to create the conditions for increased human autonomy through (1) a right to be represented by an agent in all digital interactions …", "classification": "thinking", "classification_reason": "Substantive public statement articulating a thesis about digital autonomy and economic systems, with potential implications for crypto/web3 governance and UBI-adjacent mechanisms.", "event_time": "2026-10-01T13:40:35.000Z", "event_url": "https://x.com/albertwenger/status/2105654110959911148", "repo_name": ""}, {"person_name": "Charles Hoskinson", "person_category": "Founders", "known_for": "Cardano / IOHK founder", "platform": "x", "event_type": "tweet", "event_title": "I'm having fun working on Midnight and https://t.co/UxVfN2biZf. It's like the old days again, but with a lot more wisdom and a super intelli…", "classification": "thinking", "classification_reason": "Substantive public statement from a major crypto founder about active work on Midnight protocol and personal projects, expressing strategic direction and sentiment about development philosophy.", "event_time": "2026-10-01T10:33:10.000Z", "event_url": "https://x.com/IOHK_Charles/status/2105606945042305031", "repo_name": ""}, {"person_name": "Sunny Aggarwal", "person_category": "Founders", "known_for": "Osmosis co-founder, Tendermint core", "platform": "x", "event_type": "tweet", "event_title": "I’m a few minutes away from my agents discovering they can have a shared message board https://t.co/fIK6pjPurf", "classification": "building", "classification_reason": "Active development work on agent infrastructure with a specific technical milestone (shared message board feature) being implemented.", "event_time": "2026-10-01T09:49:28.000Z", "event_url": "https://x.com/sunnya97/status/2105595948219199855", "repo_name": ""}, {"person_name": "Michael Sproul", "person_category": "Engineers", "known_for": "Sigma Prime / Lighthouse Ethereum client", "platform": "github", "event_type": "pr", "event_title": "Release v8.3.0-rc.0", "classification": "shipped", "classification_reason": "Release candidate tag for Lighthouse v8.3.0 indicates formal versioned release cycle", "event_time": "2026-10-01T02:04:58Z", "event_url": "https://github.com/sigp/lighthouse/pull/10181", "repo_name": "sigp/lighthouse"}, {"person_name": "Michael Sproul", "person_category": "Engineers", "known_for": "Sigma Prime / Lighthouse Ethereum client", "platform": "github", "event_type": "issue_comment", "event_title": "Comment on: Release v8.3.0-rc.0", "classification": "shipped", "classification_reason": "Release candidate announcement for Lighthouse v8.3.0-rc.0, indicating version milestone", "event_time": "2026-10-01T01:21:40Z", "event_url": "https://github.com/sigp/lighthouse/pull/10181#issuecomment-5922801625", "repo_name": "sigp/lighthouse"}, {"person_name": "Michael Sproul", "person_category": "Engineers", "known_for": "Sigma Prime / Lighthouse Ethereum client", "platform": "github", "event_type": "pr", "event_title": "Release v8.3.0-rc.0", "classification": "shipped", "classification_reason": "Release candidate tag for Lighthouse Ethereum client; versioned release artifact", "event_time": "2026-10-01T01:21:22Z", "event_url": "https://github.com/sigp/lighthouse/pull/10181", "repo_name": "sigp/lighthouse"}, {"person_name": "Dev Ojha", "person_category": "Founders", "known_for": "Osmosis core contributor", "platform": "github", "event_type": "push", "event_title": "Pushed to zakura-core/zakura", "classification": "shipped", "classification_reason": "Release tag v1.6.0 on active crypto project zakura indicates public version release.", "event_time": "2026-10-01T01:17:32Z", "event_url": "https://github.com/zakura-core/zakura/commit/bb12b13", "repo_name": "zakura-core/zakura"}, {"person_name": "Dev Ojha", "person_category": "Founders", "known_for": "Osmosis core contributor", "platform": "github", "event_type": "push", "event_title": "Pushed to zakura-core/zakura", "classification": "shipped", "classification_reason": "Release tag v1.6.0 on zakura-core/zakura indicates public version release", "event_time": "2026-10-01T01:09:08Z", "event_url": "https://github.com/zakura-core/zakura/commit/011c5b9", "repo_name": "zakura-core/zakura"}, {"person_name": "Dev Ojha", "person_category": "Founders", "known_for": "Osmosis core contributor", "platform": "github", "event_type": "push", "event_title": "Pushed to zakura-core/zakura", "classification": "shipped", "classification_reason": "Release tag v1.6.0 push indicates version release on core Zakura repo.", "event_time": "2026-10-01T01:03:21Z", "event_url": "https://github.com/zakura-core/zakura/commit/5cc0bdd", "repo_name": "zakura-core/zakura"}, {"person_name": "Andrew Miller", "person_category": "Engineers", "known_for": "Zcash Foundation chair, UIUC professor", "platform": "x", "event_type": "tweet", "event_title": "when's the last time someone launched a decentralized network?", "classification": "thinking", "classification_reason": "Substantive public question prompting discussion about decentralized network launches, likely leading to a technical or strategic conversation", "event_time": "2026-09-30T22:36:46.000Z", "event_url": "https://x.com/socrates1024/status/2105426658534596846", "repo_name": ""}, {"person_name": "Jack Zampolin", "person_category": "Founders", "known_for": "Pion founder, ex-Cosmos core", "platform": "x", "event_type": "tweet", "event_title": "Googles yet another example of the inevitable future that models are going to be commoditized and compute is the real resource. https://t.co…", "classification": "thinking", "classification_reason": "Substantive public observation about AI/compute commoditization trends and their implications, expressed as a thesis-like statement with concrete examples.", "event_time": "2026-09-30T22:09:53.000Z", "event_url": "https://x.com/jackzampolin/status/2105419893139214552", "repo_name": ""}, {"person_name": "Albert Wenger", "person_category": "Founders", "known_for": "Union Square Ventures partner", "platform": "x", "event_type": "tweet", "event_title": "We urgently need to become a Type I civilization on this scale ...", "classification": "thinking", "classification_reason": "Substantive public statement on civilization-scale technology challenges, characteristic of Albert Wenger's long-form macro perspective on tech and society", "event_time": "2026-09-30T21:37:44.000Z", "event_url": "https://x.com/albertwenger/status/2105411798304186453", "repo_name": ""}, {"person_name": "Hassan Malik", "person_category": "Engineers", "known_for": "Hyperlane co-founder", "platform": "github", "event_type": "pr", "event_title": "Release/1308.0.0", "classification": "shipped", "classification_reason": "Version release tag (1308.0.0) on MetaMask/core indicates a formal product release.", "event_time": "2026-09-30T21:32:29Z", "event_url": "https://github.com/MetaMask/core/pull/10640", "repo_name": "MetaMask/core"}, {"person_name": "Charles Hoskinson", "person_category": "Founders", "known_for": "Cardano / IOHK founder", "platform": "github", "event_type": "release", "event_title": "Moriarty authoring beta 0.1.0-beta.1", "classification": "shipped", "classification_reason": "Beta release of Moriarty authoring tool with semantic version tag", "event_time": "2026-09-30T21:31:45Z", "event_url": "https://github.com/CharlesHoskinson/Moriarty/releases/tag/moriarty-authoring-beta-0.1.0-beta.1", "repo_name": "CharlesHoskinson/Moriarty"}, {"person_name": "Hassan Malik", "person_category": "Engineers", "known_for": "Hyperlane co-founder", "platform": "github", "event_type": "pr", "event_title": "Release/1308.0.0", "classification": "shipped", "classification_reason": "Version release tag (1308.0.0) on MetaMask/core indicates product release", "event_time": "2026-09-30T21:23:23Z", "event_url": "https://github.com/MetaMask/core/pull/10640", "repo_name": "MetaMask/core"}, {"person_name": "Andrew MacKenzie", "person_category": "Founders", "known_for": "", "platform": "github", "event_type": "issue_comment", "event_title": "Comment on: Evaluate migrating HAL from macro to trait-based design", "classification": "thinking", "classification_reason": "Technical design discussion on trait-based architecture migration for HAL layer shows substantive architectural analysis.", "event_time": "2026-09-30T18:35:50Z", "event_url": "https://github.com/andrewdavidmackenzie/zCore/issues/78#issuecomment-5917375689", "repo_name": "andrewdavidmackenzie/zCore"}, {"person_name": "Max Resnick", "person_category": "Founders", "known_for": "Anza lead economist (Solana)", "platform": "x", "event_type": "tweet", "event_title": "Optimal strategy in Pace results in non 0 probability of catastrophy. But the leaderboard is weighted by realized catastrophy instead of pro…", "classification": "thinking", "classification_reason": "Substantive technical observation about game theory mechanics in Pace, discussing probability weighting vs realized outcomes with pedagogical comparison to continuation problems.", "event_time": "2026-09-30T18:29:12.000Z", "event_url": "https://x.com/MaxResnick/status/2105364355898650953", "repo_name": ""}, {"person_name": "Marco Streng", "person_category": "Founders", "known_for": "Genesis Mining CEO", "platform": "x", "event_type": "tweet", "event_title": "How many times has it happened to you? When your agents said the same thing: \"I can't access that.\" No login, no card, no TikTok. So you bou…", "classification": "shipped", "classification_reason": "Founder announcing Delegate product with functional capability to solve agent access/authentication problems, presented as available solution.", "event_time": "2026-09-30T18:11:49.000Z", "event_url": "https://x.com/marco_streng/status/2105359978735210820", "repo_name": ""}, {"person_name": "Joe McCann", "person_category": "Founders", "known_for": "Asymmetric Research", "platform": "x", "event_type": "tweet", "event_title": "EU Semis vs software turns after almost 40% drawdown\n\n@OpenAI’s new Dots is the shift from chatbots to always-on agents in one product.\n\nMor…", "classification": "thinking", "classification_reason": "Substantive public observation about market dynamics and AI agent shifts, offering a technical thesis on compute implications and competitive landscape.", "event_time": "2026-09-30T18:08:41.000Z", "event_url": "https://x.com/joemccann/status/2105359190139285934", "repo_name": ""}, {"person_name": "Stephen Buttolph", "person_category": "Founders", "known_for": "AvalancheGo core developer", "platform": "github", "event_type": "push", "event_title": "Pushed to ava-labs/avalanchego", "classification": "shipped", "classification_reason": "Release candidate tag push for Avalanchego v1.15.1-rc.0 indicates version milestone", "event_time": "2026-09-30T17:30:32Z", "event_url": "https://github.com/ava-labs/avalanchego/commit/758aea4", "repo_name": "ava-labs/avalanchego"}, {"person_name": "Dan Robinson", "person_category": "Engineers", "known_for": "Paradigm research partner", "platform": "x", "event_type": "tweet", "event_title": "We built a game to demonstrate the difficulty of pacing the frontier, based on a new paper from @andrewjkoh and @DrewFudenberg \n\nPlay online…", "classification": "shipped", "classification_reason": "Public release of a playable game demonstrating academic research with live leaderboard functionality", "event_time": "2026-09-30T17:11:23.000Z", "event_url": "https://x.com/danrobinson/status/2105344770113700197", "repo_name": ""}, {"person_name": "Jack Zampolin", "person_category": "Founders", "known_for": "Pion founder, ex-Cosmos core", "platform": "x", "event_type": "tweet", "event_title": "This is quietly revolutionary and changing the relationship between the state and its people. The state is making itself more legible to the…", "classification": "thinking", "classification_reason": "Substantive public statement making a thesis-driven observation about state legibility and governance, with crypto/web3 implications implicit in the linked content.", "event_time": "2026-09-30T16:42:33.000Z", "event_url": "https://x.com/jackzampolin/status/2105337516274684188", "repo_name": ""}, {"person_name": "Georgios Konstantopoulos", "person_category": "Engineers", "known_for": "Paradigm CTO", "platform": "x", "event_type": "tweet", "event_title": "OUSD seems likely to become the most liquid stablecoin in the world - now on Tempo w/ &gt;400M in liquidity\n\ncheck ousd dot fyi! https://t.c…", "classification": "shipped", "classification_reason": "Public announcement of OUSD stablecoin achieving >400M liquidity milestone on Tempo, representing a significant product/protocol milestone.", "event_time": "2026-09-30T16:09:50.000Z", "event_url": "https://x.com/gakonst/status/2105329283455758782", "repo_name": ""}, {"person_name": "Scott Lewis", "person_category": "Founders", "known_for": "Yeoman's Capital / DeFi builder", "platform": "x", "event_type": "tweet", "event_title": "onchain composability of tokenized securities is the true killer feature.\n\nthe tradfi market structure partition every market in its own sil…", "classification": "thinking", "classification_reason": "Substantive public statement articulating a technical thesis about onchain composability and how it compares to traditional finance market structure.", "event_time": "2026-09-30T15:55:34.000Z", "event_url": "https://x.com/scott_lew_is/status/2105325689649963309", "repo_name": ""}, {"person_name": "Haseeb Qureshi", "person_category": "Investors", "known_for": "Paradigm managing partner", "platform": "x", "event_type": "tweet", "event_title": "New fit 👇\n\nhttps://t.co/IOf9hS5F25 =&gt; https://t.co/NLVMNVcWxw\n@dragonfly_xyz =&gt; @dragonfly https://t.co/jMTZftYLI5", "classification": "big_move", "classification_reason": "Haseeb Qureshi's move from Dragonfly Capital (dragonfly_xyz) to Dragonfly (dragonfly) signals a significant organizational or role change at a major crypto investment firm.", "event_time": "2026-09-30T15:02:13.000Z", "event_url": "https://x.com/hosseeb/status/2105312264328982611", "repo_name": ""}, {"person_name": "Raullen Chai", "person_category": "Founders", "known_for": "IoTeX co-founder", "platform": "x", "event_type": "tweet", "event_title": "Incredibly proud of our model researchers at @machinefilab. Today, they are launching our very first Situated World Model. 🌍\n\nThe physical w…", "classification": "shipped", "classification_reason": "Public launch announcement of a new product (Situated World Model) from Machinefi Lab with a substantive feature release focused on AI agent capabilities.", "event_time": "2026-09-30T14:15:32.000Z", "event_url": "https://x.com/raullen/status/2105300515991302226", "repo_name": ""}, {"person_name": "Lefteris Karapetsas", "person_category": "Engineers", "known_for": "Rotki founder, ex-Ethereum core", "platform": "x", "event_type": "tweet", "event_title": "We are trying to make it easy for you to report issues in rotki.\n\nYou can DM me here or in TG, write an email to us, write in discord etc.\n\n…", "classification": "shipped", "classification_reason": "New in-app feature ('report problem' button) released in rotki application for user issue reporting.", "event_time": "2026-09-30T13:27:50.000Z", "event_url": "https://x.com/LefterisJP/status/2105288511083679889", "repo_name": ""}, {"person_name": "Albert Castellana", "person_category": "Founders", "known_for": "Metapool / staking infrastructure", "platform": "github", "event_type": "pr", "event_title": "site: the genswarms.com redesign (Zoom), in six languages", "classification": "shipped", "classification_reason": "Public product redesign release across multiple languages for genswarms.com", "event_time": "2026-09-30T12:51:07Z", "event_url": "https://github.com/genlayerlabs/genswarms/pull/104", "repo_name": "genlayerlabs/genswarms"}, {"person_name": "Simon Yu", "person_category": "Founders", "known_for": "iotex ecosystem", "platform": "github", "event_type": "issue_comment", "event_title": "Labeled issue: [RFC] record2dataset: build tasks with the coding-agent proposer Reefine already runs", "classification": "thinking", "classification_reason": "RFC (Request for Comments) on architectural approach for agent-based task building; substantive technical discussion.", "event_time": "2026-09-29T22:47:26Z", "event_url": "https://github.com/Human-Agent-Society/reef/issues/691", "repo_name": "Human-Agent-Society/reef"}, {"person_name": "Simon Yu", "person_category": "Founders", "known_for": "iotex ecosystem", "platform": "github", "event_type": "issue_comment", "event_title": "Labeled issue: [RFC] record2dataset: build tasks with the coding-agent proposer Reefine already runs", "classification": "thinking", "classification_reason": "RFC issue comment on agentic system design; substantive technical discussion about agent-based task building architecture.", "event_time": "2026-09-29T22:47:25Z", "event_url": "https://github.com/Human-Agent-Society/reef/issues/691", "repo_name": "Human-Agent-Society/reef"}]</script>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    try { localStorage.setItem('ar_theme', next); } catch(e) {}
+    updateThemeIcon(next);
+  }
+  function updateThemeIcon(theme) {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (!btn) return;
+    btn.innerHTML = theme === 'dark'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+  }
+  try {
+    const saved = localStorage.getItem('ar_theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); updateThemeIcon(saved); }
+  } catch(e) {}
+
+  const EVENTS = JSON.parse(document.getElementById('events-data').textContent);
+
+  function relTime(iso) {
+    const diffH = Math.floor((new Date() - new Date(iso)) / 3600000);
+    if (diffH < 1) return 'now';
+    if (diffH < 24) return diffH + 'h ago';
+    const d = Math.floor(diffH / 24);
+    if (d < 7) return d + 'd ago';
+    return new Date(iso).toLocaleDateString('en-US', {month:'short', day:'numeric'});
+  }
+  function escapeHTML(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function platformLabel(p) {
+    if (p === 'github') return 'GitHub';
+    if (p === 'farcaster') return 'Farcaster';
+    if (p === 'x' || p === 'twitter') return 'X';
+    return p;
+  }
+  function iconSVG(p) {
+    if (p === 'github') return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>';
+    if (p === 'x' || p === 'twitter') return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+    if (p === 'farcaster') return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h16v18h-3v-9l-5 6-5-6v9H4z"/></svg>';
+    return '';
+  }
+
+  // Filter to Georgios events (fallback: show what we have if no match)
+  function render() {
+    const url = new URLSearchParams(window.location.search);
+    const slug = url.get('p') || 'georgios-konstantopoulos';
+    const matchName = slug.replace(/-/g,' ');
+    let items = EVENTS.filter(e => e.person_name.toLowerCase().includes(matchName.split(' ')[0]));
+    if (items.length === 0) items = EVENTS.slice(0, 8); // Fallback demo
+    items.sort((a,b) => new Date(b.event_time) - new Date(a.event_time));
+
+    const timeline = document.getElementById('timeline');
+    timeline.innerHTML = items.map(e => {
+      const intentLabel = e.classification === 'big_move' ? 'Big move' : e.classification;
+      return `
+        <div class="timeline-item" onclick="window.open('${escapeHTML(e.event_url || '#')}', '_blank')">
+          <div class="timeline-icon">${iconSVG(e.platform)}</div>
+          <div>
+            <div class="timeline-head">
+              <span class="timeline-tag" data-intent="${e.classification}"><span class="tag-dot"></span>${intentLabel}</span>
+              <span class="timeline-source">${platformLabel(e.platform)}</span>
+              <span class="timeline-time">${relTime(e.event_time)}</span>
+            </div>
+            <div class="timeline-body">${escapeHTML(e.event_title || '')}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  render();
+</script>
+<script id="person-data" type="application/json">{"identity":{"slug":"georgios-konstantopoulos","name":"Georgios Konstantopoulos","known_for":"Paradigm CTO · building the harness layer for crypto's AI stack","category":"Engineers","verified":true,"verification_confidence":"high"},"recent_activity":{"window_days":30,"events_shown":3,"events":[{"platform":"x","classification":"shipped","title":"my claude code port in nanocodex fashion (same tools, system prompt etc.) is merged to master, feel free to try it out\n\nnanocodex update --b…","url":"https://x.com/gakonst/status/2106050242605162550","event_time":"2026-10-02T15:54:41.000Z","repo_name":null,"classification_reason":"Feature merge to master with user-facing CLI command availability (nanocodex --claude)."},{"platform":"x","classification":"shipped","title":"btw we now let you bring your own postgres in centaur\n\nhttps://t.co/8efAwoEwog","url":"https://x.com/gakonst/status/2105699253821796780","event_time":"2026-10-01T16:39:58.000Z","repo_name":null,"classification_reason":"Announcement of a new feature (bring your own postgres) being available in Centaur, a crypto infrastructure product."},{"platform":"x","classification":"shipped","title":"OUSD seems likely to become the most liquid stablecoin in the world - now on Tempo w/ &gt;400M in liquidity\n\ncheck ousd dot fyi! https://t.c…","url":"https://x.com/gakonst/status/2105329283455758782","event_time":"2026-09-30T16:09:50.000Z","repo_name":null,"classification_reason":"Public announcement of OUSD stablecoin achieving >400M liquidity milestone on Tempo, representing a significant product/protocol milestone."}]}}</script>
+</body>
+</html>

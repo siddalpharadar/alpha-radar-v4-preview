@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The quiet infrastructure war inside crypto's AI boom. — Alpha Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --bg-elevated: #ffffff;
+    --bg-hover: #f4f2ec;
+    --bg-subtle: #f7f5f0;
+    --border: #ebe8e0;
+    --text-primary: #16151a;
+    --text-secondary: #4a4845;
+    --text-tertiary: #8a867f;
+    --accent: #7c3aed;
+    --accent-soft: #f3edff;
+    --quote-border: #d9d5c9;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0d10;
+    --bg-elevated: #16161a;
+    --bg-hover: #1c1c22;
+    --bg-subtle: #131318;
+    --border: #24242c;
+    --text-primary: #f5f5f7;
+    --text-secondary: #b4b4bc;
+    --text-tertiary: #76767e;
+    --accent: #a78bfa;
+    --accent-soft: rgba(167,139,250,0.1);
+    --quote-border: #33333e;
+  }
+  * { box-sizing: border-box; }
+  html { transition: background 0.3s ease, color 0.3s ease; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text-primary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 16px; line-height: 1.5; letter-spacing: -0.005em; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ========= Header ========= */
+  .site-header {
+    position: sticky;
+    top: 0;
+    background: color-mix(in oklab, var(--bg) 90%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-header-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15.5px;
+    letter-spacing: -0.015em;
+  }
+  .brand-mark {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: conic-gradient(from 180deg at 50% 50%, #a78bfa 0deg, #f472b6 90deg, #fbbf24 180deg, #86efac 270deg, #a78bfa 360deg);
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+    position: relative;
+  }
+  .brand-mark::after {
+    content: ''; position: absolute; inset: 4px;
+    background: var(--bg); border-radius: 50%;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+  }
+  .nav a:hover { color: var(--text-primary); }
+  .nav .active { color: var(--text-primary); font-weight: 500; }
+  .theme-toggle {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+  }
+  .theme-toggle:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .theme-toggle svg { width: 14px; height: 14px; }
+
+  /* ========= Article ========= */
+  .article {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+  .article-eyebrow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+  }
+  .article-eyebrow .issue {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .article-eyebrow .dot {
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--text-tertiary);
+    display: inline-block;
+  }
+  .article-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: 54px;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    margin: 0 0 22px;
+    color: var(--text-primary);
+  }
+  .article-dek {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.42;
+    color: var(--text-secondary);
+    margin: 0 0 32px;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 44px;
+    font-size: 12.5px;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .article-meta strong { color: var(--text-secondary); font-weight: 500; }
+  .meta-sep { color: var(--border); }
+
+  /* ========= Article body ========= */
+  .prose {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18.5px;
+    line-height: 1.65;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+  }
+  .prose > p { margin: 0 0 1.4em; }
+  .prose > p:first-child::first-line { font-weight: 600; }
+
+  .prose h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 2.4em 0 0.8em;
+    color: var(--text-primary);
+    position: relative;
+  }
+  .prose h2::before {
+    content: '§';
+    position: absolute;
+    left: -1.5em;
+    top: 0.15em;
+    color: var(--accent);
+    opacity: 0.6;
+    font-size: 24px;
+  }
+
+  .prose .person {
+    display: inline;
+    color: var(--text-primary);
+    font-weight: 600;
+    border-bottom: 1px dashed var(--text-tertiary);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .prose .person:hover { border-bottom-color: var(--accent); border-bottom-style: solid; color: var(--accent); }
+  .prose .person-aka {
+    color: var(--text-tertiary);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.9em;
+  }
+
+  .prose blockquote {
+    margin: 1.6em 0;
+    padding: 2px 0 2px 20px;
+    border-left: 2px solid var(--quote-border);
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 18px;
+  }
+  .prose blockquote .cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--text-tertiary);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .prose a {
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent-soft);
+    transition: border-color 0.15s;
+  }
+  .prose a:hover { border-bottom-color: var(--accent); }
+
+  /* Project cards inside article */
+  .project-list {
+    margin: 1.4em 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .project-list li {
+    padding: 18px 20px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+  }
+  .project-list li:hover { border-color: var(--quote-border); transform: translateY(-1px); }
+  .project-list .project-name {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 15.5px;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  /* What to watch — tighter editorial list */
+  .watch-list {
+    margin: 1.4em 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: watch;
+  }
+  .watch-list li {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    counter-increment: watch;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .watch-list li:last-child { border-bottom: none; }
+  .watch-list li::before {
+    content: counter(watch, decimal-leading-zero);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    padding-top: 7px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ========= Article footer ========= */
+  .article-footer {
+    margin-top: 72px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .article-footer-sources {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 32px;
+  }
+  .article-footer-sources .dot { color: var(--text-tertiary); margin: 0 6px; }
+
+  .subscribe {
+    padding: 36px 32px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center;
+    margin: 32px 0;
+  }
+  .subscribe-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+    color: var(--text-primary);
+  }
+  .subscribe-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 20px;
+    line-height: 1.5;
+  }
+  .subscribe-form {
+    display: flex;
+    gap: 8px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .subscribe-form input {
+    flex: 1;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .subscribe-form input:focus { border-color: var(--accent); }
+  .subscribe-form button {
+    padding: 11px 20px;
+    background: var(--text-primary);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .subscribe-form button:hover { opacity: 0.9; }
+
+  .related {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 44px;
+    flex-wrap: wrap;
+  }
+  .related a {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .related a:hover { border-color: var(--text-tertiary); color: var(--text-primary); background: var(--bg-elevated); }
+
+  .site-footer {
+    padding: 44px 24px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    .article { padding: 40px 20px 60px; }
+    .article-title { font-size: 40px; }
+    .article-dek { font-size: 18px; }
+    .prose { font-size: 17.5px; }
+    .prose h2 { font-size: 26px; }
+    .prose h2::before { position: static; margin-right: 8px; }
+    .subscribe { padding: 28px 20px; }
+    .subscribe-form { flex-direction: column; }
+    .nav { gap: 16px; font-size: 12.5px; }
+    .nav a:not(.active):not(.theme-toggle) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"></span>
+      <span>Alpha Radar</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="#" class="active">This week</a>
+      <a href="index.html#feed">Live feed</a>
+      <a href="#">Archive</a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" id="theme-toggle-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<article class="article">
+  <!-- AR:EYEBROW -->
+
+  <div class="article-eyebrow">
+    <span class="issue">Issue 01</span>
+    <span class="dot"></span>
+    <span>Week of 2026-09-30 – 2026-10-06</span>
+    <span class="dot"></span>
+    <span>AI × Infrastructure</span>
+  </div>
+<!-- AR:EYEBROW_END -->
+
+  <!-- AR:HEADER -->
+
+  <h1 class="article-title">The quiet infrastructure war inside crypto's AI boom.</h1>
+  <p class="article-dek">Nineteen of the most technical founders in crypto stopped waiting for OpenAI and Anthropic to build secure coding agents. This week, they shipped their own — tools designed to write, audit, and deploy code holding billions in assets.</p>
+<!-- AR:HEADER_END -->
+
+  <!-- AR:META -->
+
+  <div class="article-meta">
+    <span><strong>5 min read</strong></span>
+    <span class="meta-sep">·</span>
+    <span>19 of 103 tracked</span>
+    <span class="meta-sep">·</span>
+    <span>111 signals</span>
+    <span class="meta-sep">·</span>
+    <span>Sources: X · Farcaster · Github</span>
+  </div>
+<!-- AR:META_END -->
+
+  <div class="prose">
+<!-- AR:BODY -->
+  <p>The most technical founders in crypto are no longer waiting for OpenAI or Anthropic to build secure AI coding tools. They're building their own. This week, at least five teams shipped infrastructure that lets AI agents write, test, and deploy code — with security constraints designed for systems that hold billions.</p>
+
+<h2>What's happening under the hood</h2>
+<p>Paradigm's CTO <span class="person" data-person="georgios-konstantopoulos">Georgios Konstantopoulos</span> shipped <em>nanocodex</em> — a harness that wraps both OpenAI's Codex and Anthropic's Claude. Harnesses are the wrappers that give AI models the ability to execute code, run tests, and push to production. His version lets you spawn both models as subagents working together.</p>
+<p>Meanwhile, NEAR's <span class="person" data-person="alexander-skidanov">Alexander Skidanov</span> announced an AI agent that can formally verify code — mathematically proving it does what it claims. Paradigm's <span class="person" data-person="dan-robinson">Dan Robinson</span> pushed 14 commits this week to a similar tool for Solidity smart contracts.</p>
+
+<h2>Who's moving</h2>
+
+<p><span class="person" data-person="georgios-konstantopoulos">Georgios Konstantopoulos</span> <span class="person-aka">— Paradigm CTO</span> merged code combining Codex and Claude into a single agent framework. He's also considering paid access to <em>Cyclops</em> — Paradigm's internal security tool.</p>
+<blockquote>
+  Basically codex security but for serious immutable fast crypto infrastructure that can hold billions of dollars.
+  <span class="cite">— Georgios Konstantopoulos, on X</span>
+</blockquote>
+
+<p><span class="person" data-person="alexander-skidanov">Alexander Skidanov</span> <span class="person-aka">— NEAR co-founder</span> claimed the #1 spot on Lean Eval, the benchmark for formal verification agents.</p>
+<blockquote>
+  We now have a very capable and cheap formal verification agent, and will share how we use it to formally prove NEAR.
+  <span class="cite">— Alexander Skidanov, on X</span>
+</blockquote>
+
+<p><span class="person" data-person="jack-zampolin">Jack Zampolin</span> <span class="person-aka">— Pion founder</span> has been building <em>gents</em>, an open-source coding agent framework. His GitHub shows active work on evaluation suites for both Codex and Claude.</p>
+<blockquote>
+  I'd be about 200k lines in.
+  <span class="cite">— Jack Zampolin, on X</span>
+</blockquote>
+
+<p><span class="person" data-person="brian-armstrong">Brian Armstrong</span> <span class="person-aka">— Coinbase CEO</span> is focused on the <em>infrastructure</em> for agents, not the agents themselves — unveiling an API designed for autonomous systems.</p>
+<blockquote>
+  Your agent can now see your portfolio, trade crypto, stocks, and derivatives.
+  <span class="cite">— Brian Armstrong, on X</span>
+</blockquote>
+
+<p><span class="person" data-person="lefteris-karapetsas">Lefteris Karapetsas</span> <span class="person-aka">— Rotki founder</span> added agent interfaces to his portfolio tracker.</p>
+<blockquote>
+  You can interact with the data in any way you want via MCP and your favorite agent.
+  <span class="cite">— Lefteris Karapetsas, on X</span>
+</blockquote>
+
+<h2>The consensus</h2>
+<p>Everyone agrees models themselves are becoming commodities.</p>
+<blockquote>
+  Models are going to be commoditized and compute is the real resource.
+  <span class="cite">— <span class="person" data-person="jack-zampolin">Jack Zampolin</span></span>
+</blockquote>
+<p>The value is moving to execution infrastructure — the harnesses, security layers, and APIs that turn language models into reliable developers.</p>
+
+<h2>The dissent</h2>
+<p>Not everyone thinks this ends well.</p>
+
+<p><span class="person" data-person="joe-mccann">Joe McCann</span> <em>(cybersecurity asymmetry)</em>: <q>Agentic war coming. 10,000 tokens per second is unfathomable speed... it will create an endless game of cyber defense against relentless cyber attacks.</q></p>
+
+<p><span class="person" data-person="haseeb-qureshi">Haseeb Qureshi</span> <em>(systemic financial risk)</em>: <q>AI agent-caused bank runs!</q></p>
+
+<p><span class="person" data-person="jeff-garzik">Jeff Garzik</span> <em>(user sovereignty)</em>: <q>AI assistants like Muse will succeed when the human self-sovereignty barrier is respected, legally and practically.</q></p>
+
+<h2>Projects positioned to benefit</h2>
+<ul class="project-list">
+  <li><strong class="project-name">Paradigm's internal tooling — nanocodex, Cyclops</strong>If they commercialize, they have first-mover advantage in enterprise-grade agent security for crypto infrastructure.</li>
+  <li><strong class="project-name">NEAR Protocol</strong>Their formal verification agent gives them a concrete technical moat. Provable security is valuable when competitors can't match it.</li>
+  <li><strong class="project-name">Coinbase</strong>Armstrong is building the financial backend for agents, not the agents themselves. The picks-and-shovels play.</li>
+  <li><strong class="project-name">Pion (gents)</strong>Open-source positioning could capture developer mindshare as harness standards emerge.</li>
+  <li><strong class="project-name">Rotki</strong>Early MCP integration means compatibility with whatever agent ecosystem wins.</li>
+</ul>
+
+<h2>What this likely means</h2>
+<p>Security auditing firms face disruption. If agents can formally verify code, the value shifts from human auditors to teams running verification agents.</p>
+<p>Protocol teams will need their own agent infrastructure. Relying on generic tools becomes too risky when billions are at stake.</p>
+<p>The attack surface expands faster than defenses. McCann's 10,000 tokens-per-second point implies offense scales better than defense — at least in the near term.</p>
+<p>Open-source harnesses become critical infrastructure. Whoever sets the standards controls the security assumptions.</p>
+
+<h2>What to watch</h2>
+<ol class="watch-list">
+  <li>Whether Paradigm actually opens Cyclops to external customers — signal of commercial intent, and the moment &quot;AI security for crypto&quot; becomes a market.</li>
+  <li>NEAR's formal verification agent applied to non-NEAR contracts — proving generalizability beyond their own protocol.</li>
+  <li>Any major protocol breach traced to an AI coding agent — this would reshape the entire conversation overnight.</li>
+</ol>
+<!-- AR:BODY_END -->
+</div>
+
+  <footer class="article-footer">
+    <!-- AR:SOURCES -->
+
+  <p class="article-footer-sources">
+    Signals <span class="dot">·</span> 19 people <span class="dot">·</span> 111 events <span class="dot">·</span> Sep 23 – Oct 3 <span class="dot">·</span> X <span class="dot">·</span> Farcaster <span class="dot">·</span> GitHub
+  </p>
+<!-- AR:SOURCES_END -->
+
+    <!-- AR:SUBSCRIBE -->
+
+  <div class="subscribe">
+    <h3 class="subscribe-title">Get this in your inbox every Monday.</h3>
+    <p class="subscribe-sub">One weekly deep dive on what the smartest people in crypto are collectively focused on. Free. No spam. Unsubscribe anytime.</p>
+    <form class="subscribe-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent = '✓ Subscribed';">
+      <input type="email" placeholder="your@email.com" required />
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+<!-- AR:SUBSCRIBE_END -->
+
+    <div class="related">
+      <a href="#">← Previous issue</a>
+      <a href="index.html#feed">See the live feed</a>
+      <a href="#">All issues</a>
+    </div>
+  </footer>
+</article>
+
+<footer class="site-footer">
+  Alpha Radar · Curated signal from 103 verified crypto operators · <a href="#" style="color:inherit;border-bottom:1px solid currentColor;">About</a>
+</footer>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    try { localStorage.setItem('ar_theme', next); } catch(e) {}
+    updateThemeIcon(next);
+  }
+  function updateThemeIcon(theme) {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (!btn) return;
+    btn.innerHTML = theme === 'dark'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+  }
+  try {
+    const saved = localStorage.getItem('ar_theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); updateThemeIcon(saved); }
+  } catch(e) {}
+
+  // Clicking a person name goes to their page
+  document.querySelectorAll('.person').forEach(el => {
+    el.addEventListener('click', () => {
+      const slug = el.dataset.person;
+      if (slug) window.location.href = 'person.html?p=' + slug;
+    });
+  });
+</script>
+</body>
+</html>
